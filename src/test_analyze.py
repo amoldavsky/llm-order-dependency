@@ -72,6 +72,32 @@ def calculate_roc_auc(df, pos):
     return None
 
 
+def calculate_response_distribution(df, pos):
+    """
+    Calculates the percentage distribution of the model's choice/response
+    for a specific locked position test run.
+
+    Parameters:
+    - df (pd.DataFrame): The DataFrame containing the data.
+    - pos (int): The locked position (0-3) for which to calculate the distribution.
+
+    Returns:
+    - pd.Series: A series representing the percentage distribution of predictions.
+    """
+
+    # Calculate value counts normalized to get percentages, ensuring all positions are represented
+    distribution_percentage = \
+            df[f'pos_{pos}_response_idx']\
+                .value_counts(normalize=True)\
+                .reindex([0, 1, 2, 3], fill_value=0) * 100
+
+    # Rename the index for clarity
+    distribution_percentage.index = [f"options {p}" for p in distribution_percentage.index]
+
+    # Round the percentages to two decimal places
+    return distribution_percentage.round(2)
+
+
 def analyze_dataset(df, name):
     print("analyzing dataset ", name)
     print("  question count: ", len(df.index))
@@ -92,6 +118,20 @@ def analyze_dataset(df, name):
         overall_correctness_list.append(overall_corr)
         certain_correctness_list.append(certain_corr)
         uncertain_correctness_list.append(uncertain_corr)
+
+        # distribution of choices
+        df_resp_ds_certain = calculate_response_distribution(df[df["is_certain"]], pos)
+        print("    choice distribution (certain questions): ")
+        print("      options 0: ", df_resp_ds_certain.iloc[0])
+        print("      options 1: ", df_resp_ds_certain.iloc[1])
+        print("      options 2: ", df_resp_ds_certain.iloc[2])
+        print("      options 3: ", df_resp_ds_certain.iloc[3])
+        df_resp_ds_uncertain = calculate_response_distribution(df[~df["is_certain"]], pos)
+        print("    choice distribution (uncertain question): ")
+        print("      options 0: ", df_resp_ds_uncertain.iloc[0])
+        print("      options 1: ", df_resp_ds_uncertain.iloc[1])
+        print("      options 2: ", df_resp_ds_uncertain.iloc[2])
+        print("      options 3: ", df_resp_ds_uncertain.iloc[3])
 
         # metrics: Precision, Recall, F1-Score
         precision, recall, f1 = calculate_additional_metrics(df, pos)
