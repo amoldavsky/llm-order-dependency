@@ -17,7 +17,11 @@ git lfs install
 mkdir ./tmp
 ```
 
-poetry setups
+poetry
+```shell
+poetry lock
+poetry install
+```
 
 .env setup
 ```bash
