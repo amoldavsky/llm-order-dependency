@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "llm-order-dependency"
+version = "0.1.0"
+description = ""
+authors = ["Assaf M"]
+license = "NONE"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+jupyter = "^1.1.1"
+ipython = "^8.27.0"
+ipykernel = "^6.29.5"
+requests = "^2.31"
+tqdm = "^4.65"
+python-dotenv = "^1.0.0"
+pandas = "^2.1.0"
+openai = "^1.47.1"
+backoff = "^2.2.1"
+tiktoken = "^0.7.0"
+datasets = "^3.0.0"
+langchain = "^0.3.0"
+langchain-community = "^0.3.0"
+langchain-openai = "^0.2.0"
+scipy = "^1.14.1"
+matplotlib = "^3.9.2"
+seaborn = "^0.13.2"
+scikit-learn = "^1.5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
