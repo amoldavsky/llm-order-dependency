@@ -5,7 +5,7 @@ Test LLM order dependency against GPT-3.5 and GPT-4o-mini using public datasets.
 ## Approach
 
 To show order dependency with LLMs can: 
-(1) pick a few sample MCQs and run them through and LLM many times
+(1) pick a few sample MCQs and run them through and LLM many times while shifting answer location
 (2) take a large sample of MCQs from various areas and test through the LLM
 
 This experiment focuses on (2) where we sample MCQs from the following datasets:
