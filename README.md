@@ -1,47 +1,31 @@
 # LLM order dependency
 
-## Project Structure
+Test LLM order dependency against GPT-3.5 and GPT-4o-mini using public datasets. 
 
-`/data` - contains all input and needed data / datasets  
-`/tmp` - local temp dir, not included with project  
-`/dist` - output distributable resources / final outputs  
-`/src` - source code  
-`/src/data` - data fetching and generation code, only needed to re-generate all datasets
+## Approach
 
-## Setup
+To show order dependency with LLMs can: 
+(1) pick a few sample MCQs and run them through and LLM many times
+(2) take a large sample of MCQs from various areas and test through the LLM
 
-clone
-```bash
-git clone ...
-git lfs install
-mkdir ./tmp
-```
+This experiment focuses on (2) where we sample MCQs from the following datasets:
+- RACE
+- ARC
+- Common Sense QA
+- Trivia QA
 
-poetry
-```shell
-poetry lock
-poetry install
-```
+This experiment also focuses only on 4 multiple choice questions.
+This experiment can be extended to test less or more than 4 options.
 
-.env setup
-```bash
-touch .env
-echo "OPENAI_API_KEY=" >> ./.env
-```
+According to current research papers LLM are more prone to the order dependency problem
+with uncertain questions. This is why a big chunk of the data preprocessing stage involves
+scoring certain vs uncertain questions.
 
-## Running
+Once we determine certainty for each of the LLMs (gpt-3.5 and gpt-4o-mini) we proceed to
+test the actual order dependency. We test answer position at each of the four option slots and record
+the LLMs responses. We also record the probabilities for each answer for deeper analysis later.
 
-[test_analyze.py](src/test_analyze.py) - analysis on pre-scored results  
-[test_prompt.py](src/test_prompt.py) - contains the prompts
-
-(options) [test.py](src/test.py) - re-score order dependency again GPT 3.5 and 4o-mini
-
-(options) [data-process.py](src/data-process.py) - re-score certain vs uncertain questions
-
-(optional) [data.py](src/data.py) - re-create datasets  
-*NOTE: this will score a 1000 rows x4 against an openai model *
-
-### Output
+### Analysis Output
 
 ```shell
 /Users/amoldavsky/dev/amoldavsky/llm-order-dependency/llm-order-dependency/.venv/bin/python3 /Users/amoldavsky/dev/amoldavsky/llm-order-dependency/llm-order-dependency/src/test_analyze.py 
@@ -186,4 +170,47 @@ Actual 3         0.21         0.24         0.30         0.25
 
 Process finished with exit code 0
 ```
+
+
+## Project Structure
+
+`/data` - contains all input and needed data / datasets  
+`/tmp` - local temp dir, not included with project  
+`/dist` - output distributable resources / final outputs  
+`/src` - source code  
+`/src/data` - data fetching and generation code, only needed to re-generate all datasets
+
+## Setup
+
+clone
+```bash
+git clone ...
+git lfs install
+mkdir ./tmp
+```
+
+poetry
+```shell
+poetry lock
+poetry install
+```
+
+.env setup
+```bash
+touch .env
+echo "OPENAI_API_KEY=" >> ./.env
+```
+
+## Running
+
+[test_analyze.py](src/test_analyze.py) - analysis on pre-scored results  
+[test_prompt.py](src/test_prompt.py) - contains the prompts
+
+(options) [test.py](src/test.py) - re-score order dependency again GPT 3.5 and 4o-mini
+
+(options) [data-process.py](src/data-process.py) - re-score certain vs uncertain questions
+
+(optional) [data.py](src/data.py) - re-create datasets  
+*NOTE: this will score a 1000 rows x4 against an openai model *
+
 
